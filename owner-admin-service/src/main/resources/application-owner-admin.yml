@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: owner-admin-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/owner_admin_db
+    username: owner_admin
+    password: ${DB_PASSWORD:changeme}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8081
+  servlet:
+    context-path: /owner-admin
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.egov.owneradmin: DEBUG
+
+flyway:
+  locations: classpath:db/migration
+  baseline-on-migrate: true
