@@ -1,0 +1,547 @@
+{
+  "info": {
+    "name": "E-Government Unified API",
+    "description": "Comprehensive API collection for E-Government services",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tenant_id",
+      "value": "default",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"phoneNumber\": \"+2207123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/refresh-token",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "refresh-token"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Police - Vehicle Registration",
+      "item": [
+        {
+          "name": "Get All Vehicles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/police/vehicles?page=0&size=20&sort=registrationDate,desc",
+              "host": ["{{base_url}}"],
+              "path": ["police", "vehicles"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                },
+                {
+                  "key": "sort",
+                  "value": "registrationDate,desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register Vehicle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vin\": \"WBADT43452G296753\",\n  \"make\": \"TOYOTA\",\n  \"model\": \"COROLLA\",\n  \"year\": 2020,\n  \"color\": \"WHITE\",\n  \"ownerName\": \"John Doe\",\n  \"ownerLicenseNumber\": \"DL-789123\",\n  \"additionalDrivers\": [\n    {\n      \"name\": \"Jane Doe\",\n      \"licenseNumber\": \"DL-789124\",\n      \"relationship\": \"SPOUSE\"\n    }\n  ],\n  \"insurance\": {\n    \"provider\": \"GAMBIA_INSURANCE\",\n    \"policyNumber\": \"POL-123456\",\n    \"expiryDate\": \"2024-12-31\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/police/vehicles",
+              "host": ["{{base_url}}"],
+              "path": ["police", "vehicles"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Vehicle by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/police/vehicles/1",
+              "host": ["{{base_url}}"],
+              "path": ["police", "vehicles", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Vehicle Driver",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alice Smith\",\n  \"licenseNumber\": \"DL-789125\",\n  \"relationship\": \"CHILD\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/police/vehicles/1/drivers",
+              "host": ["{{base_url}}"],
+              "path": ["police", "vehicles", "1", "drivers"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Renew Vehicle Registration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentMethod\": \"CASH\",\n  \"insurance\": {\n    \"provider\": \"GAMBIA_INSURANCE\",\n    \"policyNumber\": \"POL-123456\",\n    \"expiryDate\": \"2025-12-31\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/police/vehicles/1/renew",
+              "host": ["{{base_url}}"],
+              "path": ["police", "vehicles", "1", "renew"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Police - Digital License",
+      "item": [
+        {
+          "name": "Get All Licenses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/police/licenses?page=0&size=20&sort=issuedDate,desc",
+              "host": ["{{base_url}}"],
+              "path": ["police", "licenses"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                },
+                {
+                  "key": "sort",
+                  "value": "issuedDate,desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Issue Digital License",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"holderName\": \"John Doe\",\n  \"licenseClass\": \"B\",\n  \"personalInfo\": {\n    \"dateOfBirth\": \"1990-05-15\",\n    \"gender\": \"MALE\",\n    \"bloodType\": \"O_POSITIVE\",\n    \"address\": \"123 Kairaba Avenue, Serrekunda\"\n  },\n  \"testResults\": {\n    \"writtenTest\": {\n      \"date\": \"2023-01-10\",\n      \"score\": 85,\n      \"passed\": true\n    },\n    \"practicalTest\": {\n      \"date\": \"2023-01-12\",\n      \"score\": 90,\n      \"passed\": true\n    }\n  },\n  \"medicalInfo\": {\n    \"examDate\": \"2023-01-05\",\n    \"eyesightTest\": \"PASSED\",\n    \"colorVisionTest\": \"PASSED\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/police/licenses",
+              "host": ["{{base_url}}"],
+              "path": ["police", "licenses"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify License",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/police/licenses/verify/DL-789123",
+              "host": ["{{base_url}}"],
+              "path": ["police", "licenses", "verify", "DL-789123"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get License QR Code",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/police/licenses/qr/1",
+              "host": ["{{base_url}}"],
+              "path": ["police", "licenses", "qr", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Suspend License",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Traffic violations\",\n  \"suspensionPeriod\": 30\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/police/licenses/1/suspend",
+              "host": ["{{base_url}}"],
+              "path": ["police", "licenses", "1", "suspend"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin - Templates",
+      "item": [
+        {
+          "name": "Get All Templates",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/templates?page=0&size=20&sort=name,asc",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "templates"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                },
+                {
+                  "key": "sort",
+                  "value": "name,asc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Student Loan Application\",\n  \"category\": \"Education\",\n  \"description\": \"Educational funding application\",\n  \"fields\": [\n    {\n      \"name\": \"loanAmount\",\n      \"label\": \"Loan Amount\",\n      \"type\": \"number\",\n      \"required\": true,\n      \"validation\": {\n        \"min\": 100,\n        \"max\": 100000\n      },\n      \"placeholder\": \"Enter loan amount\"\n    },\n    {\n      \"name\": \"loanTerm\",\n      \"label\": \"Loan Term\",\n      \"type\": \"select\",\n      \"required\": true,\n      \"options\": [\n        \"5 years\",\n        \"10 years\",\n        \"15 years\",\n        \"20 years\"\n      ],\n      \"defaultValue\": \"10 years\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/templates",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "templates"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Template by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/templates/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "templates", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Template Field",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "X-Tenant-ID",
+                "value": "{{tenant_id}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"collateral\",\n  \"label\": \"Collateral\",\n  \"type\": \"text\",\n  \"required\": false,\n  \"placeholder\": \"Describe collateral\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/templates/1/fields",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "templates", "1", "fields"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
