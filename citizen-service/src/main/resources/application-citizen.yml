@@ -1,0 +1,116 @@
+# Citizen Service Configuration
+server:
+  port: 8083
+  servlet:
+    context-path: /api/citizen
+
+spring:
+  application:
+    name: citizen-service
+  profiles:
+    active: citizen
+  
+  # Database Configuration (temporary H2 for development)
+  datasource:
+    url: jdbc:h2:mem:citizendb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+  
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+    open-in-view: false
+  
+  # Flyway Configuration
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
+  
+  # Security Configuration
+  security:
+    require-ssl: false
+    
+  # Jackson Configuration (Mobile Optimized)
+  jackson:
+    default-property-inclusion: NON_NULL
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+# Citizen Service Specific Configuration
+citizen:
+  # Mobile App Settings
+  mobile:
+    offline-support: true
+    location-accuracy: 10 # meters
+    emergency-timeout: 30 # seconds
+    session-timeout: 3600 # 1 hour
+  
+  # GPS Tracking Configuration
+  gps:
+    accuracy-threshold: 10.0 # meters
+    update-interval: 30 # seconds
+    max-location-age: 300 # 5 minutes
+  
+  # Emergency Configuration
+  emergency:
+    auto-dispatch: true
+    response-timeout: 300 # 5 minutes
+    priority-levels: [LOW, MEDIUM, HIGH, CRITICAL]
+  
+  # Address Verification
+  address:
+    verification-timeout: 30 # days
+    gps-required: true
+    photo-required: true
+
+# External Service URLs
+external:
+  services:
+    police: https://gg10g1urv5roo2ucw.lite.vusercontent.net
+    emergency-dispatch: https://8juyhk3ix3hhzzxoo.lite.vusercontent.net
+    government: https://kzmixiaaf443clitsc4x.lite.vusercontent.net
+    payment: http://localhost:8085
+    communication: http://localhost:8086
+
+# Logging Configuration
+logging:
+  level:
+    com.egov.citizen: INFO
+    org.springframework.security: DEBUG
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/citizen-service.log
+
+# Management and Monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    tags:
+      service: citizen-service
